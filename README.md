@@ -26,7 +26,13 @@ Table of contents
 
 ## Installation
 
-1. **install parhugin from the source code**:
+1. **install using pip**
+
+    ```bash
+    pip install git+https://github.com/kasra-hosseini/parhugin.git
+    ```
+
+2. **install parhugin from the source code**:
 
     * Clone parhugin source code:
 
