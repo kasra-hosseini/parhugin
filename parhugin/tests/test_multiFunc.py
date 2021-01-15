@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import pytest
-from parallel_lib import multiFunc
+from parhugin import multiFunc
 import time
 
 def mysum(a, b, sleep=0.5, info="mysum"): 

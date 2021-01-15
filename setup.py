@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="parlib",
+    name="parhugin",
     version="0.0.1",
     description="Parallelize Python codes",
     author=u"Kasra Hosseini",
@@ -11,7 +11,7 @@ setuptools.setup(
     long_description = open('README.md').read(),
     long_description_content_type = 'text/markdown',
     zip_safe = False,
-    url="https://github.com/kasra-hosseini/parlib",
+    url="https://github.com/kasra-hosseini/parhugin",
     packages = setuptools.find_packages(),
     include_package_data = True,
     platforms="OS Independent",
@@ -39,7 +39,7 @@ setuptools.setup(
 
     entry_points={
         'console_scripts': [
-            'parlib = parlib.parlib:main',
+            'parhugin = parhugin.parhugin:main',
         ],
     }
 )
