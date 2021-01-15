@@ -4,16 +4,16 @@
 </div>
 
 <p align="center">
-    <a href="https://github.com/kasra-hosseini/parallel_lib/workflows/Continuous%20integration/badge.svg">
-        <img alt="Continuous integration badge" src="https://github.com/kasra-hosseini/parallel_lib/workflows/Continuous%20integration/badge.svg">
+    <a href="https://github.com/kasra-hosseini/parlib/workflows/Continuous%20integration/badge.svg">
+        <img alt="Continuous integration badge" src="https://github.com/kasra-hosseini/parlib/workflows/Continuous%20integration/badge.svg">
     </a>
-    <a href="https://github.com/kasra-hosseini/parallel_lib/blob/main/LICENSE">
+    <a href="https://github.com/kasra-hosseini/parlib/blob/main/LICENSE">
         <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg">
     </a>
     <br/>
 </p>
 
-`parallel_lib` provides functions to:
+`parlib` provides functions to:
 
 - [run one or more Python functions in parallel using multiprocessing](#run-one-or-more-python-functions-in-parallel-using-multiprocessing)
 
@@ -26,25 +26,25 @@ Table of contents
 
 ## Installation
 
-1. **install parallel_lib from the source code**:
+1. **install parlib from the source code**:
 
-    * Clone parallel_lib source code:
+    * Clone parlib source code:
 
     ```bash
-    git clone https://github.com/kasra-hosseini/parallel_lib.git 
+    git clone https://github.com/kasra-hosseini/parlib.git 
     ```
 
-    * Install parallel_lib:
+    * Install parlib:
 
     ```
-    cd /path/to/my/parallel_lib
+    cd /path/to/my/parlib
     python setup.py install
     ```
 
     Alternatively:
 
     ```
-    cd /path/to/my/parallel_lib
+    cd /path/to/my/parlib
     pip install -v -e .
     ```
 
@@ -65,12 +65,12 @@ In this scenario, we have:
 ⚠️ If a function has only one argument, do not forget to add it to the above list either `[func_one_arg, [arg1]]` or `[func_one_arg, (arg1,)]`.
 
 - User specifies the number of processes to be run in parallel.
-- `parallel_lib` parallelizes by distributing the jobs following FIFO on the requested number of processes.
+- `parlib` parallelizes by distributing the jobs following FIFO on the requested number of processes.
 
 Example:
 
 ```python
-from parallel_lib import multiFunc
+from parlib import multiFunc
 import time
 
 # Define two simple functions, func1 and func2 
@@ -88,7 +88,7 @@ def func2(a, sleep=0.2, info="func2"):
 # Specify the number of processes to be run in parallel
 myproc = multiFunc(num_req_p=10)
 
-# There are different ways to add jobs in parallel_lib
+# There are different ways to add jobs in parlib
 # 1. function and its arguments
 myproc.add_job(target_func=func1, target_args=(2, 3, 0.5, "func1"))
 print(myproc)

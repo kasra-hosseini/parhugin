@@ -1,1 +1,0 @@
-from parallel_lib.multi_func import multiFunc
