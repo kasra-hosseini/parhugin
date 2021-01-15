@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
+__author__ = "Kasra Hosseini"
+__license__ = "MIT License"
+
 import multiprocessing
 import time
 from typing import Union, Sequence
