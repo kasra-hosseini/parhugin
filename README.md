@@ -10,11 +10,42 @@
     <br/>
 </p>
 
-`parallel_lib` provides functions to parallelize:
+`parallel_lib` provides functions to:
 
-- [one or more Python functions using multiprocessing](#)
+- [run one or more Python functions in parallel using multiprocessing](#run-one-or-more-python-functions-in-parallel-using-multiprocessing)
 
-## Parallelize one or more Python functions using multiprocessing
+
+Table of contents
+-----------------
+
+- [Installation and setup](#installation)
+- [Run one or more Python functions in parallel using multiprocessing](#run-one-or-more-python-functions-in-parallel-using-multiprocessing)
+
+## Installation
+
+1. **install parallel_lib from the source code**:
+
+    * Clone parallel_lib source code:
+
+    ```bash
+    git clone https://github.com/kasra-hosseini/parallel_lib.git 
+    ```
+
+    * Install parallel_lib:
+
+    ```
+    cd /path/to/my/parallel_lib
+    python setup.py install
+    ```
+
+    Alternatively:
+
+    ```
+    cd /path/to/my/parallel_lib
+    pip install -v -e .
+    ```
+
+## Run one or more Python functions in parallel using multiprocessing 
 
 In this scenario, we have:
 
