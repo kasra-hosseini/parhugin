@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'parallel_lib/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'parallel_lib/**'
