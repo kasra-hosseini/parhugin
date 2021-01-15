@@ -1,4 +1,4 @@
-name: CI multi_func tests
+name: Continuous integration
 
 on:
   push:
