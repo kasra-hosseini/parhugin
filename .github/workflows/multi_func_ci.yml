@@ -1,0 +1,27 @@
+name: CI multi_func tests
+
+on:
+  push:
+    paths:
+      - 'parallel_lib/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'parallel_lib/**'
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.6
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.6
+    - name: Install dependencies
+      run: |
+        pip install -v -e .
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        pytest .
