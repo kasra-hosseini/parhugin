@@ -4,8 +4,8 @@
 </div>
 
 <p align="center">
-    <a href="">
-        <img alt="License" src="https://github.com/kasra-hosseini/parallel_lib/blob/main/LICENSE">
+    <a href="https://github.com/kasra-hosseini/parallel_lib/blob/main/LICENSE">
+        <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg">
     </a>
     <br/>
 </p>
