@@ -3,11 +3,11 @@ name: Continuous integration
 on:
   push:
     paths:
-      - 'parallel_lib/**'
+      - 'parhugin/**'
       - '.github/workflows/**'
   pull_request:
     paths:
-      - 'parallel_lib/**'
+      - 'parhugin/**'
 
 jobs:
   run_script:
