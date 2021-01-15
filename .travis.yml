@@ -1,0 +1,21 @@
+cache: packages
+sudo: false
+
+matrix:
+  include:
+    - language: python
+      env:
+        - NOMIS_API_KEY=DUMMY
+      python:
+        - 3.76
+      install:
+        - pip install -v -e .
+      script:
+        - pytest
+
+warnings_are_errors: false
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change%
