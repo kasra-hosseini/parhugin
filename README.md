@@ -69,6 +69,7 @@ for i in range(1, 20):
 
 # and then adding them to myproc
 myproc.add_list_jobs(list_jobs)
+print(myproc)
 
 # finally, run the jobs
 myproc.run_jobs()
