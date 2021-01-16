@@ -7,6 +7,7 @@ __license__ = "MIT License"
 import multiprocessing
 import time
 from typing import Union, Sequence
+from .utils import Process as myProcess
 
 class multiFunc:
 
@@ -43,7 +44,7 @@ class multiFunc:
         target_args : Sequence
             Arguments of the function (serial version)
         """
-        p = multiprocessing.Process(target=target_func, args=target_args)
+        p = myProcess(target=target_func, args=target_args)
         self.jobs.append(p)
 
     def add_list_jobs(self, list_jobs: Sequence):
@@ -99,6 +100,7 @@ class multiFunc:
         self._print_job_info()
         self.job_elapsed_time = time.time() - self.job_start_time
         print(f"Total time: {self.job_elapsed_time}")
+        self._print_exceptions()
 
     def run_jobs(self):
         """Run all the jobs"""
@@ -160,4 +162,13 @@ class multiFunc:
         print(f"#finished jobs: {self.num_finished_p}")
         print(f"#running jobs: {self.num_running_p}")
         print(f"#remained jobs: {self.num_remain_p}")
+        print(10*"=")
+    
+    def _print_exceptions(self):
+        """Print list of exceptions raised during run"""
+        print(10*"=")
+        print("List of exceptions")
+        for i, one_job in enumerate(self.jobs):
+            if one_job.exception:
+                print(i, one_job.exception)
         print(10*"=")
