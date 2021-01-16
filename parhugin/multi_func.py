@@ -69,7 +69,10 @@ class multiFunc:
         self.num_running_p = 0
         self.num_finished_p = 0
         self.num_remain_p = 0
+        self.num_exceptions_p = 0
         for proc in self.jobs:
+            if proc.exception:
+                self.num_exceptions_p += 1
             if proc.is_alive():
                 self.num_running_p += 1
             elif proc._popen == None:
@@ -168,7 +171,7 @@ class multiFunc:
         """Print list of exceptions raised during run"""
         print(10*"=")
         print("List of exceptions")
-        for i, one_job in enumerate(self.jobs):
-            if one_job.exception:
-                print(i, one_job.exception)
+        for i, proc in enumerate(self.jobs):
+            if proc.exception:
+                print(i, proc.exception)
         print(10*"=")
