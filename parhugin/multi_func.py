@@ -8,6 +8,7 @@ import multiprocessing
 import time
 from typing import Union, Sequence
 from .utils import Process as myProcess
+from .utils import cprint, bc
 
 class multiFunc:
 
@@ -80,7 +81,7 @@ class multiFunc:
             else:
                 self.num_finished_p += 1
     
-    def run_jobs_index(self, i1: int, i2: int):
+    def run_jobs_index(self, i1: int, i2: int, verbosity: int=1):
         """Run jobs from i1 to i2 indices
 
         Parameters
@@ -88,7 +89,13 @@ class multiFunc:
         i1 : int
             index 1
         i2 : int
-            index 2
+            index 2 
+        verbosity : int, optional
+            Level of verbosity for output:
+            0: no message
+            1 (default): minimal (e.g., info on start/end jobs)
+            2: info on running/finished/remained jobs after each start_job
+            3: info after every check_jobs! (lots of lines)
         """
         assert (i2 > i1 >= 0), f"{i2} should be larger than {i1} and {i1} should be >= 0"
         assert (i2 <= len(self.jobs)), f"{i2} is more than the number of jobs ({len(self.jobs)})"
@@ -96,40 +103,49 @@ class multiFunc:
         self._pointer = i1
         self.job_start_time = time.time() 
         while self._pointer < i2:
-            self.start_job()
+            self.start_job(verbosity=verbosity)
             time.sleep(self.sleep_time)
         self.join_all()
 
         self._print_job_info()
         self.job_elapsed_time = time.time() - self.job_start_time
-        print(f"Total time: {self.job_elapsed_time}")
+        if verbosity >= 1:
+            print(f"Total time: {self.job_elapsed_time}")
         self._print_exceptions()
 
-    def run_jobs(self):
-        """Run all the jobs"""
-        self.run_jobs_index(0, len(self.jobs))
+    def run_jobs(self, verbosity: int=1):
+        """Run all the jobs in self.jobs, refer to run_jobs_index for more info"""
+        self.run_jobs_index(0, len(self.jobs), verbosity)
     
-    def start_job(self, verbose: bool=False):
+    def start_job(self, verbosity: int=1):
         """Start a process after checking:
            1. number of running processes is less than the number of requested processes
            2. the requested process is not alive or has not been done before
 
-        Parameters
-        ----------
-        verbose : bool, optional
-            verbosity, by default False
+        verbosity : int, optional
+            Level of verbosity for output:
+            0: no message
+            1 (default): minimal (e.g., info on start/end jobs)
+            2: info on running/finished/remained jobs after each start_job
+            3: info after every check_jobs! (lots of lines)
         """
         self.check_jobs()
         if self.num_running_p < self.num_req_p:
             job2run = self.jobs[self._pointer]
             if (not job2run.is_alive()) and (job2run._popen == None):
-                print(f"[INFO] start job-{self._pointer}")
+                if verbosity >= 1: 
+                    print(f"[INFO] start job-{self._pointer}")
                 job2run.start()
+                if verbosity >= 2:
+                    self._print_job_info()
             elif job2run._popen != None: 
-                print(f"[INFO] job-{self._pointer} is finished.")
+                if verbosity >= 1:
+                    print(f"[INFO] job-{self._pointer} is finished.")
+                    if verbosity >= 2:
+                        self._print_job_info()
             self._pointer += 1
         else:
-            if verbose:
+            if verbosity >= 3:
                 print(f"[INFO] number of running jobs: {self.num_running_p}.")
     
     def join_all(self):
@@ -158,14 +174,14 @@ class multiFunc:
         info += f"\n#jobs: {len(self.jobs)}"
         return info
     
-    def _print_job_info(self):
+    def _print_job_info(self, text_color=bc.green):
         """Print some info about the job"""
         self.check_jobs()
-        print(10*"=")
-        print(f"#finished jobs: {self.num_finished_p}")
-        print(f"#running jobs: {self.num_running_p}")
-        print(f"#remained jobs: {self.num_remain_p}")
-        print(10*"=")
+        print(20*"=")
+        cprint("[INFO]", text_color, f"#finished jobs: {self.num_finished_p}")
+        cprint("[INFO]", text_color, f"#running jobs: {self.num_running_p}")
+        cprint("[INFO]", text_color, f"#remained jobs: {self.num_remain_p}")
+        print(20*"=")
     
     def _print_exceptions(self):
         """Print list of exceptions raised during run"""
