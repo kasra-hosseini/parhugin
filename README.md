@@ -114,3 +114,9 @@ print(myproc)
 # finally, run the jobs
 myproc.run_jobs()
 ```
+
+It is also possible to change the verbosity level of the output by:
+
+```python
+myproc.run_jobs(verbosity=2)
+```
