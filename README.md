@@ -23,6 +23,7 @@ Table of contents
 
 - [Installation and setup](#installation)
 - [Run one or more Python functions in parallel using multiprocessing](#run-one-or-more-python-functions-in-parallel-using-multiprocessing)
+- [Complete examples](#complete-examples)
 
 ## Installation
 
@@ -73,7 +74,7 @@ In this scenario, we have:
 - User specifies the number of processes to be run in parallel.
 - `parhugin` parallelizes by distributing the jobs following FIFO on the requested number of processes.
 
-Example:
+### Example 1
 
 First, we import `parhugin` and define two simple functions called `func1` and `func2`. These functions can have different number of arguments.
 
@@ -137,5 +138,43 @@ myproc.run_jobs()
 It is also possible to change the verbosity level of the output by:
 
 ```python
+myproc.run_jobs(verbosity=2)
+```
+
+## Complete examples
+
+### Example 1
+
+```python
+from parhugin import multiFunc
+import time
+
+# Define two simple functions, func1 and func2 
+# Note that functions can have different number of arguments
+def func1(a, b, sleep=0.5, info="func1"): 
+    print(f"start, {info} calculated {a+b}")
+    time.sleep(sleep)
+    print(f"end, {info}")
+
+def func2(a, sleep=0.2, info="func2"): 
+    print(f"start, {info} prints {a}")
+    time.sleep(sleep)
+    print(f"end, {info}")
+
+myproc = multiFunc(num_req_p=10)
+myproc.add_job(target_func=func1, target_args=(2, 3, 0.5, "func1"))
+print(myproc)
+
+myproc.add_job(target_func=func2, target_args=(10, 0.2, "func2"))
+print(myproc)
+
+list_jobs = []
+for i in range(1, 20):
+    list_jobs.append([func2, (f"{i}", 0.2, "func2")])
+
+# and then adding them to myproc
+myproc.add_list_jobs(list_jobs)
+print(myproc)
+
 myproc.run_jobs(verbosity=2)
 ```
