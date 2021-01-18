@@ -75,6 +75,8 @@ In this scenario, we have:
 
 Example:
 
+First, we import `parhugin` and define two simple functions called `func1` and `func2`. These functions can have different number of arguments.
+
 ```python
 from parhugin import multiFunc
 import time
@@ -90,19 +92,33 @@ def func2(a, sleep=0.2, info="func2"):
     print(f"start, {info} prints {a}")
     time.sleep(sleep)
     print(f"end, {info}")
+```
 
-# Specify the number of processes to be run in parallel
+Next, we specify the number of processes to run in parallel. This can be the number of processors if the jobs are CPU-intensive. Otherwise, you can set this to any other values.
+
+```python
 myproc = multiFunc(num_req_p=10)
+```
 
-# There are different ways to add jobs in parhugin
-# 1. function and its arguments
+Now, we need to add jobs to be run in parallel. There are different ways to do this:
+
+1) Add one function and its arguments:
+
+```python
 myproc.add_job(target_func=func1, target_args=(2, 3, 0.5, "func1"))
 print(myproc)
+```
 
+Similarly, we can add another function:
+
+```python
 myproc.add_job(target_func=func2, target_args=(10, 0.2, "func2"))
 print(myproc)
+```
 
-# 2. by creating a list of jobs
+2) Create a list of jobs:
+
+```python
 list_jobs = []
 for i in range(1, 20):
     list_jobs.append([func2, (f"{i}", 0.2, "func2")])
@@ -110,8 +126,11 @@ for i in range(1, 20):
 # and then adding them to myproc
 myproc.add_list_jobs(list_jobs)
 print(myproc)
+```
 
-# finally, run the jobs
+Finally, run the jobs on the requested number of processes:
+
+```python
 myproc.run_jobs()
 ```
 
