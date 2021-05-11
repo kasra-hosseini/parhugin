@@ -4,6 +4,7 @@
 __author__ = "Kasra Hosseini"
 __license__ = "MIT License"
 
+from collections import deque
 import multiprocessing
 import time
 from typing import Union, Sequence
@@ -13,7 +14,8 @@ from .utils import cprint, bc
 class multiFunc:
 
     def __init__(self, num_req_p: Union[int, None]=None, 
-                 sleep_time: float=0.1):
+                 sleep_time: float=0.1,
+                 max_queue_length: int=10):
         """Instantiate multiFunc
 
         Parameters
@@ -32,8 +34,12 @@ class multiFunc:
         self.num_req_p = num_req_p
         self.sleep_time = sleep_time
         self.num_running_p = 0
+        self.queue = deque()
         self.jobs = []
         self._pointer = None
+        # The variable max_queue_length is used to check:
+        # (self.num_running_p + self.num_remain_p) < self.max_queue_length
+        self.max_queue_length = max_queue_length
     
     def add_job(self, target_func, target_args: Sequence):
         """Add a job to the list of jobs
@@ -45,8 +51,9 @@ class multiFunc:
         target_args : Sequence
             Arguments of the function (serial version)
         """
-        p = myProcess(target=target_func, args=target_args)
-        self.jobs.append(p)
+        self.queue.append([target_func, target_args])
+        #p = myProcess(target=target_func, args=target_args)
+        #self.jobs.append(p)
 
     def add_list_jobs(self, list_jobs: Sequence):
         """Add a list of jobs
@@ -98,7 +105,7 @@ class multiFunc:
             3: info after every check_jobs! (lots of lines)
         """
         assert (i2 > i1 >= 0), f"{i2} should be larger than {i1} and {i1} should be >= 0"
-        assert (i2 <= len(self.jobs)), f"{i2} is more than the number of jobs ({len(self.jobs)})"
+        assert (i2 <= len(self.queue)), f"{i2} is more than the number of jobs ({len(self.queue)})"
 
         self._pointer = i1
         self.job_start_time = time.time() 
@@ -115,7 +122,7 @@ class multiFunc:
 
     def run_jobs(self, verbosity: int=1):
         """Run all the jobs in self.jobs, refer to run_jobs_index for more info"""
-        self.run_jobs_index(0, len(self.jobs), verbosity)
+        self.run_jobs_index(0, len(self.queue), verbosity)
     
     def start_job(self, verbosity: int=1):
         """Start a process after checking:
@@ -129,7 +136,13 @@ class multiFunc:
             2: info on running/finished/remained jobs after each start_job
             3: info after every check_jobs! (lots of lines)
         """
+        
         self.check_jobs()
+        while ((self.num_running_p + self.num_remain_p) < self.max_queue_length) and (len(self.queue) > 0):
+            t_func, t_args = self.queue.popleft()
+            self.jobs.append(myProcess(target=t_func, args=t_args)) 
+            self.check_jobs()
+
         if self.num_running_p < self.num_req_p:
             job2run = self.jobs[self._pointer]
             if (not job2run.is_alive()) and (job2run._popen == None):
@@ -158,6 +171,7 @@ class multiFunc:
         self.num_running_p = 0
         self.jobs = []
         self._pointer = None
+        self.queue = deque()
 
     def set_pointer(self, i: int):
         """Manually set the pointer
@@ -172,6 +186,7 @@ class multiFunc:
     def __str__(self):
         info = f"#requested processed: {self.num_req_p}"
         info += f"\n#jobs: {len(self.jobs)}"
+        info += f"\n#queued: {len(self.queue)}"
         return info
     
     def _print_job_info(self, text_color=bc.green):
@@ -181,6 +196,7 @@ class multiFunc:
         cprint("[INFO]", text_color, f"#finished jobs: {self.num_finished_p}")
         cprint("[INFO]", text_color, f"#running jobs: {self.num_running_p}")
         cprint("[INFO]", text_color, f"#remained jobs: {self.num_remain_p}")
+        cprint("[INFO]", text_color, f"#queued jobs: {len(self.queue)}")
         print(20*"=")
     
     def _print_exceptions(self):
