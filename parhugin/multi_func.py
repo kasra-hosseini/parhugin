@@ -73,7 +73,18 @@ class multiFunc:
             self.add_job(target_func=one_job[0], target_args=one_job[1])
     
     def check_jobs(self):
-        """Check th number of running/finished/remained jobs"""
+        """
+        Check the number of running/finished/remained jobs
+
+        In parhugin, self.queue keeps track of all jobs to be run
+        Jobs are added from queue to ---> self.jobs (list)
+        
+        The following variables are all computed based on self.jobs:
+        num_running_p, num_finished_p, num_remain_p, num_exceptions_p
+
+        ATTENTION: num_remain_p can be 0 but len(self.queue) != 0
+                   The reason is that num_remain_p is computed based on self.jobs
+        """
         self.num_running_p = 0
         self.num_finished_p = 0
         self.num_remain_p = 0
