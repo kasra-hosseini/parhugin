@@ -57,7 +57,7 @@ def test_multiFunc_exception():
         list_jobs.append([mydivide, (i, i+1)])
 
     myproc.add_list_jobs(list_jobs)
-    assert len(myproc.jobs) == 10
+    assert len(myproc.queue) == 10
 
     myproc.run_jobs()
 
