@@ -129,7 +129,7 @@ class multiFunc:
             time.sleep(self.sleep_time)
         self.join_all()
 
-        self._print_job_info()
+        #self._print_job_info()
         self.job_elapsed_time = time.time() - self.job_start_time
         if verbosity >= 1:
             print(f"Total time: {self.job_elapsed_time}")
@@ -171,13 +171,13 @@ class multiFunc:
             job2run = self.jobs[self._jobs_pointer]
             if (not job2run.is_alive()) and (job2run._popen == None):
                 if verbosity >= 1: 
-                    print(f"[INFO] start job-{self._jobs_pointer}")
+                    print(f"[INFO] start job-{self._pointer}")
                 job2run.start()
                 if verbosity >= 2:
                     self._print_job_info()
             elif job2run._popen != None: 
                 if verbosity >= 1:
-                    print(f"[INFO] job-{self._jobs_pointer} is finished.")
+                    print(f"[INFO] job-{self._pointer} is finished.")
                     if verbosity >= 2:
                         self._print_job_info()
             self._pointer += 1
