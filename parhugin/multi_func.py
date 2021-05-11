@@ -37,6 +37,8 @@ class multiFunc:
         self.queue = deque()
         self.jobs = []
         self._pointer = None
+        self._jobs_pointer = None
+        self._queue_pointer = None
         # The variable max_queue_length is used to check:
         # (self.num_running_p + self.num_remain_p) < self.max_queue_length
         self.max_queue_length = max_queue_length
@@ -119,6 +121,8 @@ class multiFunc:
         assert (i2 <= len(self.queue)), f"{i2} is more than the number of jobs ({len(self.queue)})"
 
         self._pointer = i1
+        self._queue_pointer = i1
+        self._jobs_pointer = 0
         self.job_start_time = time.time() 
         while self._pointer < i2:
             self.start_job(verbosity=verbosity)
@@ -149,25 +153,35 @@ class multiFunc:
         """
         
         self.check_jobs()
+        if self.num_finished_p > self.max_queue_length:
+            tmp_running_p = [proc for proc in self.jobs if proc.is_alive()] 
+            tmp_remain_p = [proc for proc in self.jobs if ((not proc.is_alive()) and (proc._popen == None))] 
+            self.jobs = []
+            self.jobs = tmp_running_p + tmp_remain_p
+            self._jobs_pointer = len(tmp_running_p)
+
+        self.check_jobs()
         while ((self.num_running_p + self.num_remain_p) < self.max_queue_length) and (len(self.queue) > 0):
-            t_func, t_args = self.queue.popleft()
+            t_func, t_args = self.queue[self._queue_pointer]
+            del self.queue[self._queue_pointer]
             self.jobs.append(myProcess(target=t_func, args=t_args)) 
             self.check_jobs()
 
         if self.num_running_p < self.num_req_p:
-            job2run = self.jobs[self._pointer]
+            job2run = self.jobs[self._jobs_pointer]
             if (not job2run.is_alive()) and (job2run._popen == None):
                 if verbosity >= 1: 
-                    print(f"[INFO] start job-{self._pointer}")
+                    print(f"[INFO] start job-{self._jobs_pointer}")
                 job2run.start()
                 if verbosity >= 2:
                     self._print_job_info()
             elif job2run._popen != None: 
                 if verbosity >= 1:
-                    print(f"[INFO] job-{self._pointer} is finished.")
+                    print(f"[INFO] job-{self._jobs_pointer} is finished.")
                     if verbosity >= 2:
                         self._print_job_info()
             self._pointer += 1
+            self._jobs_pointer += 1
         else:
             if verbosity >= 3:
                 print(f"[INFO] number of running jobs: {self.num_running_p}.")
@@ -182,6 +196,8 @@ class multiFunc:
         self.num_running_p = 0
         self.jobs = []
         self._pointer = None
+        self._jobs_pointer = None
+        self._queue_pointer = None
         self.queue = deque()
 
     def set_pointer(self, i: int):
