@@ -32,9 +32,10 @@ def test_multiFunc():
     
     myproc.check_jobs()
     assert myproc.num_running_p == 0
-    assert myproc.num_remain_p == 20
+    assert myproc.num_remain_p == 0
     assert myproc.num_finished_p == 0
     assert myproc.num_exceptions_p == 0
+    assert len(myproc.queue) == 20 
 
     myproc.run_jobs()
     assert myproc.num_running_p == 0
