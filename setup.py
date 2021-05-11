@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="parhugin",
-    version="0.0.1",
+    version="0.0.2",
     description="Parallelize Python codes",
     author=u"Kasra Hosseini",
     #author_email="",
