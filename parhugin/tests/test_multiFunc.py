@@ -20,7 +20,7 @@ def test_multiFunc():
 
     # add one job
     myproc.add_job(target_func=mysum, target_args=(2, 3, 0.1, "1"))
-    assert len(myproc.jobs) == 1
+    assert len(myproc.queue) == 1
 
     # add a list of jobs
     list_jobs = []
@@ -28,7 +28,7 @@ def test_multiFunc():
         list_jobs.append([mysum, (4, 5, 0.01, f"{i}")])
     
     myproc.add_list_jobs(list_jobs)
-    assert len(myproc.jobs) == 20 
+    assert len(myproc.queue) == 20 
     
     myproc.check_jobs()
     assert myproc.num_running_p == 0
