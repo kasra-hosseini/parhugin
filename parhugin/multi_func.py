@@ -41,7 +41,7 @@ class multiFunc:
         self._queue_pointer = None
         # The variable max_queue_length is used to check:
         # (self.num_running_p + self.num_remain_p) < self.max_queue_length
-        self.max_queue_length = max_queue_length
+        self.max_queue_length = max(max_queue_length, num_req_p)
     
     def add_job(self, target_func, target_args: Sequence):
         """Add a job to the list of jobs
