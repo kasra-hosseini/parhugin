@@ -2,13 +2,13 @@ import setuptools
 
 setuptools.setup(
     name="parhugin",
-    version="0.0.2",
+    version="0.0.3",
     description="Parallelize Python codes",
     author=u"Kasra Hosseini",
     #author_email="",
     license="MIT License",
     keywords=["parallel processing", "parallelize", "multiprocessing"],
-    long_description = open('README.md').read(),
+    long_description = open('README.md', encoding='utf-8', errors='replace').read(),
     long_description_content_type = 'text/markdown',
     zip_safe = False,
     url="https://github.com/kasra-hosseini/parhugin",
